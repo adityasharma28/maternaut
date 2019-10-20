@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block page_header %}
+    <h3>Babysitters</h3>
+{% endblock %}
+{% block content %}
+<script>
+    function initMap() {
+        if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      }
+      else{
+        alert("Location is not supported by your browser.");
+      }
+      function showPosition(position) {
+        latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        // marker.setPosition(latlng);
+        // map.setCenter(latlng);
+        // map.setZoom(16);
+        let cityname;
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'latLng': latlng}, function (results, status) {
+       if(status == google.maps.GeocoderStatus.OK) {           // if geocode success
+    //   document.getElementById('maps_search').value = results[0].formatted_address;
+    //   lat =   results[0].geometry.location.lat().toFixed(6);
+    //   lng =   results[0].geometry.location.lng().toFixed(6);
+    //   full_add = results[0].formatted_address;
+         var add_comp = results[0].address_components
+         for(var i=0;i<add_comp.length;i++){
+             if(add_comp[i].types[0] == "administrative_area_level_1"){
+                $.post(
+                    "{% url 'childcare:home' %}",
+                    {
+                        city: '"' + add_comp[i].long_name + '"'
+                    },
+                    function(data, status) {
+                        console.log("success");
+                    });
+                break;
+             }
+         }
+        console.log(cityname);
+      }
+    });
+  }
+    }
+
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDV--RWSFF8_6LWSGPd4fTAzI5RylVF2c0&callback=initMap"
+async defer></script>
+<div class="container">
+    <form action="{% url 'childcare:home'%}" method="post">
+        {% csrf_token %}
+        <input type="text" name="city" id="childcare_text" value="delhi" placeholder="Enter City"> 
+        <input type="submit" value="search" class="ml-2 mb-4">
+    </form>
+    <div id="babysitters" class="text-center">
+    {% for babysitter in babysitters %}
+    <div class="d-flex justify-content-center">
+    <div class="card w-50">
+        <div class="card-body">
+            <h5 class="card-title">{{babysitter.name.lng_cont_name}}</h5>
+            <a href="{{babysitter.link}}" class="btn btn-primary">Know More</a>
+        </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+</div>
+{% endblock %}
+
+{% block auth_button %}
+<form action="{% url 'accounts:logout' %}" method="post">
+    {% csrf_token %}
+<button class="btn btn-danger ml-auto" type="submit">Logout</button>
+</form>
+{% endblock %}

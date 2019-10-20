@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block page_header %}
+    <h3>Home</h3>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div id="home_menu" class="row justify-content-center mt-3">
+        <div id="home_menu_item1" class=''>
+            <div class="card" style="width: 18rem;">
+                    <img src="{% static '/svg/home_babysit_illust.svg' %}" class="card-img-top" alt="" height="195" width="286">
+                    <div class="card-body">
+                        <h5 class="card-title">Babysitters near you</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="{% url 'childcare:home' %}" class="btn btn-primary">Find Babysitters</a>
+                    </div>
+                    </div>
+            <!-- <a href="{% url 'childcare:home' %}" class="btn btn-primary">Find Babysitters</a> -->
+        </div>
+        <div id="home_menu_item2" class="h-100 ml-5">
+                <div class="card" style="width: 18rem;">
+                        <img src="{% static '/svg/home_learn_illust.svg' %}" class="card-img-top" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title">Learn New Skills</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="{% url 'learn:home' %}" class="btn btn-primary">Learn & Earn</a>
+                        </div>
+                        </div>
+            <!-- <a href="{% url 'learn:home' %}" class="btn btn-primary">Skills & Jobs</a> -->
+        </div>
+        <div id="home_menu_item3" class="h-100 ml-5">
+                <div class="card" style="width: 18rem;">
+                        <img src="{% static '/svg/home_connect_illust.svg' %}" class="card-img-top" alt=""  height="195" width="286">
+                        <div class="card-body">
+                            <h5 class="card-title">Make connections</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <a href="{% url 'connect:home' %}" class="btn btn-primary">Connect</a>
+                        </div>
+                        </div>
+            <!-- <a href="{% url 'connect:home' %}" class="btn btn-primary">Connect</a> -->
+        </div>
+    </div>
+
+    <div class="row fixed-bottom">
+        <div class="col d-flex flex-row-reverse">
+            <img src="{% static '/svg/home_illust.svg' %}" alt="" height="180" width="320px">
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block auth_button %}
+<form action="{% url 'accounts:logout' %}" method="post">
+    {% csrf_token %}
+<button class="btn btn-danger ml-auto" type="submit">Logout</button>
+</form>
+{% endblock %}

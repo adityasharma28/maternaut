@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block page_header %}
+    <h3>Learn</h3>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <form action="{% url 'learn:home'%}" method="post" class="align-items-center">
+            {% csrf_token %}
+            <input type="text" name="query">
+            <input type="submit" value="search">
+        </form>
+        <div id="babysitters" class="text-center">
+        {% for video_id in video_ids %}
+        <div class="d-flex justify-content-center">
+        <div class="card w-50">
+            <iframe width="420" height="315"
+                src="https://www.youtube.com/embed/{{video_id.id}}">
+            </iframe>
+        </div>
+        </div>
+    </div>
+        {% endfor %}
+    </div>
+</div>
+    {% endblock %}
+
+{% block auth_button %}
+<form action="{% url 'accounts:logout' %}" method="post">
+    {% csrf_token %}
+<button class="btn btn-danger ml-auto" type="submit">Logout</button>
+</form>
+{% endblock %}
