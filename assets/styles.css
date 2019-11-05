@@ -4,7 +4,7 @@ body{
 
 #babysitters {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 20px;
     grid-template-rows: minmax(10px, auto);
 }
@@ -17,7 +17,7 @@ label{
     display: none
 }
 
-#id_username, #id_password, #id_password1, #id_password2, #childcare_text{
+#id_username, #id_password, #id_password1, #id_password2, #childcare_text, #learn_text{
     width: 320px;
     margin-top: 20px;
     padding: 5px;

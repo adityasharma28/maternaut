@@ -6,6 +6,68 @@
 {% endblock %}
 
 {% block content %}
+{% csrf_token %}
+<script>
+        // let csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        // console.log(csrftoken);
+        function initMap() {
+            let csrftoken = $("[name=csrfmiddlewaretoken]").val();
+            if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+          }
+          else{
+            alert("Location is not supported by your browser.");
+          }
+          function showPosition(position) {
+            latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            // marker.setPosition(latlng);
+            // map.setCenter(latlng);
+            // map.setZoom(16);
+            // let cityname;
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({'latLng': latlng}, function (results, status) {
+           if(status == google.maps.GeocoderStatus.OK) {           // if geocode success
+        //   document.getElementById('maps_search').value = results[0].formatted_address;
+        //   lat =   results[0].geometry.location.lat().toFixed(6);
+        //   lng =   results[0].geometry.location.lng().toFixed(6);
+        //   full_add = results[0].formatted_address;
+             var add_comp = results[0].address_components
+             
+             for(var i=0;i<add_comp.length;i++){
+                 if(add_comp[i].types[0] == "administrative_area_level_2"){
+                    // $.post(
+                    //     "{% url 'childcare:home' %}",
+                    //     {
+                    //         city: '"' + add_comp[i].long_name + '"'
+                    //     },
+                    //     function(data, status) {
+                    //         console.log("success");
+                    //     });
+                    let params = "city="+ add_comp[i].long_name +" &lat= "+ position.coords.latitude.toFixed(6) +"&lng= "+ position.coords.longitude.toFixed(6) +""
+                    // console.log(params);
+
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function(){
+                        if(this.readyState == 4 && this.status == 200) {
+                            console.log(this.responseText);
+                        }
+                    };
+                    xhttp.open("POST", "{% url 'home:save_location' %}", true);
+                    xhttp.setRequestHeader("X-CSRFToken", csrftoken);
+                    xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                    console.log(params);
+                    xhttp.send(params);
+                 }
+             }
+          }
+        });
+      }
+        }
+    
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyDV--RWSFF8_6LWSGPd4fTAzI5RylVF2c0&callback=initMap"
+    async defer></script>
+
 <div class="container">
     <div id="home_menu" class="row justify-content-center mt-3">
         <div id="home_menu_item1" class=''>
@@ -13,7 +75,7 @@
                     <img src="{% static '/svg/home_babysit_illust.svg' %}" class="card-img-top" alt="" height="195" width="286">
                     <div class="card-body">
                         <h5 class="card-title">Babysitters near you</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <p class="card-text">Search and get the top and trusted babysitters around the city for your child.</p>
                         <a href="{% url 'childcare:home' %}" class="btn btn-primary">Find Babysitters</a>
                     </div>
                     </div>
@@ -24,7 +86,7 @@
                         <img src="{% static '/svg/home_learn_illust.svg' %}" class="card-img-top" alt="">
                         <div class="card-body">
                             <h5 class="card-title">Learn New Skills</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <p class="card-text">Learn new skills from video tutorials and become self dependent.</p>
                             <a href="{% url 'learn:home' %}" class="btn btn-primary">Learn & Earn</a>
                         </div>
                         </div>
@@ -35,7 +97,7 @@
                         <img src="{% static '/svg/home_connect_illust.svg' %}" class="card-img-top" alt=""  height="195" width="286">
                         <div class="card-body">
                             <h5 class="card-title">Make connections</h5>
-                            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            <p class="card-text">Find other single parents around the city and connect with them on the go.</p>
                             <a href="{% url 'connect:home' %}" class="btn btn-primary">Connect</a>
                         </div>
                         </div>
@@ -56,4 +118,19 @@
     {% csrf_token %}
 <button class="btn btn-danger ml-auto" type="submit">Logout</button>
 </form>
+{% endblock %}
+
+{% block navigation %}
+    <li class="nav-item active">
+    <a class="nav-link" href="{% url 'home:home' %}">Home <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'childcare:home' %}">Babysitters</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'learn:home' %}">Skills </a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'connect:home' %}">Connect</a>
+    </li>
 {% endblock %}

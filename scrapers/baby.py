@@ -2,7 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-def get_babysitters(city):     
+def get_babysitters(city): 
+    # if(city=="null"):
+
     url='https://www.justdial.com/' + city + '/search?q=Baby-Sitters'
     headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36'}
     name1=[]

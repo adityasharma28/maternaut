@@ -1,13 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Maternaut | Connect</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block page_header %}
+    <h3>Connect</h3>
+{% endblock %}
+{% block content %}
+{% csrf_token %}
     <h1>Connect with single parents in your city!</h1>
-    <div></div>
-</body>
-</html>
+    <div id="babysitters" class="col-md-12 text-center">
+        {% for user in users %}
+            <div class="card" style="width: 18rem; align-items: center; justify-content: center; display: flex;">
+            <div class="card-body">
+                <h5 class="card-title">{{user.user}}</h5>
+                <p class="card-text"><small class="text-muted">{{user.city}}</small></p>
+                <a href="#" class="btn btn-primary">Connect</a>
+            </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block auth_button %}
+<form action="{% url 'accounts:logout' %}" method="post">
+    {% csrf_token %}
+<button class="btn btn-danger ml-auto" type="submit">Logout</button>
+</form>
+{% endblock %}
+
+
+{% block navigation %}
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'home:home' %}">Home</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'childcare:home' %}">Babysitters</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="{% url 'learn:home' %}">Skills <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item active">
+    <a class="nav-link" href="{% url 'connect:home' %}">Connect</a>
+    </li>
+{% endblock %}
